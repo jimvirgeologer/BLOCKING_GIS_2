@@ -1,5 +1,0 @@
-1. Rock Code 310 of MST_MV_500_E_001? Was changed to 420.
-
-2. Review the SDN4 face mapping. Re assign previous face samples to SDNS.\
-
-3. Changed the proper rock code of the DONS and SAINTS

@@ -5,9 +5,10 @@ account: mcmadarang
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 6546549
-bundleId: 6073606
+bundleId: 6076640
 url: https://mcmadarang.shinyapps.io/Blocking_GIS_2/
-when: 1657085705.76506
-lastSyncTime: 1657085705.76506
+when: 1657153598.79771
+lastSyncTime: 1657153598.79771
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: Changes.txt

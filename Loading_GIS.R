@@ -10,7 +10,7 @@ library(visdat)
 
 
 
-setwd("~/Current Work/R_projects/Blocking_GIS")
+setwd("~/Current Work/R_projects/BLOCKING_GIS_2")
 toMatch <- c("~")
 file.list_gis <- list.files(path = './FACE_MAPPING_GIS', pattern = '.xlsx', recursive = TRUE, full.names = TRUE)
 file.list_gis <- file.list_gis[!grepl(paste(toMatch,collapse="|"), file.list_gis)]
@@ -221,25 +221,25 @@ face_map_plot <- ggplot(data = df_points, aes(color = COMP_AU, text = HOLE_ID)) 
 col <- colorRamp(c("gray","blue","green","yellow","red","purple"))
 
 
-plot <- plot_ly(data = df_points) %>% 
-  add_sf(type = "scatter", color = ~fn_ROCKCODE, text = ~HOLE_ID)%>% 
-  layout(title = "AMCI Face Samples",
-         plot_bgcolor='#e5ecf6', 
-         xaxis = list( 
-           zerolinecolor = '#ffff', 
-           zerolinewidth = 2, 
-           gridcolor = 'ffff'), 
-         yaxis = list( 
-           zerolinecolor = '#ffff', 
-           zerolinewidth = 2, 
-           gridcolor = 'ffff') )
-
-plot
+# plot <- plot_ly(data = df_points) %>% 
+#   add_sf(type = "scatter", color = ~fn_ROCKCODE, text = ~HOLE_ID)%>% 
+#   layout(title = "AMCI Face Samples",
+#          plot_bgcolor='#e5ecf6', 
+#          xaxis = list( 
+#            zerolinecolor = '#ffff', 
+#            zerolinewidth = 2, 
+#            gridcolor = 'ffff'), 
+#          yaxis = list( 
+#            zerolinecolor = '#ffff', 
+#            zerolinewidth = 2, 
+#            gridcolor = 'ffff') )
+# 
+# plot
 
 
 ############ INPUT SHAPEFILE POSITION LINES - N_S_ ###############  
 
-setwd("~/Current Work/R_projects/Blocking_GIS/Shapefiles")
+setwd("~/Current Work/R_projects/BLOCKING_GIS_2/Shapefiles")
 
 
 POS_LINES_N_S <- st_read(
@@ -259,7 +259,7 @@ plot(POS_LINES_N_S)
 
 ############ INPUT SHAPEFILE POSITION LINES - E_W ###############  
 
-setwd("~/Current Work/R_projects/Blocking_GIS/Shapefiles")
+setwd("~/Current Work/R_projects/BLOCKING_GIS_2/Shapefiles")
 
 
 POS_LINES_E_W<- st_read(
@@ -288,5 +288,8 @@ POS_FACE_MAP_AVERAGE <- POS_FACE_MAP %>%
   filter(!is.na(COMP_AU)) %>%
   group_by(POS_N_S, fn_ROCKCODE, LEVEL) %>% 
   summarize(AVE= mean(COMP_AU)) %>% mutate(AVE = signif(AVE,3))
+
+
+setwd("~/Current Work/R_projects/BLOCKING_GIS_2")
 
 
