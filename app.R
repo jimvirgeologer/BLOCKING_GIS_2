@@ -11,8 +11,8 @@ library(dplyr)
 
 ui <- fluidPage(  
   
-  titlePanel("MACO MINE_2"),
-  theme = shinythemes::shinytheme('flatly'),
+  titlePanel("MACO MINE_4"),
+  # theme = shinythemes::shinytheme('flatly'),
   sidebarLayout(
     sidebarPanel(
       selectInput('VEIN', 'Select VEIN', POS_FACE_MAP_AVERAGE$fn_ROCKCODE,selected=as.factor(levels(POS_FACE_MAP_AVERAGE$fn_ROCKCODE)[1]))),
@@ -54,10 +54,9 @@ server <- function(input, output) {
     POS_FACE_MAP  %>%
       dplyr::filter(fn_ROCKCODE == input$VEIN) %>%
       mutate(COMP_AU = signif(COMP_AU,3)) %>%
-      ggplot(aes(x = POS_N_S, y = LEVEL, label = HOLE_ID)) +
-      # geom_text(hjust = 0, vjust = 0,nudge_x = 0.5,nudge_y = 0.5) +
+      ggplot(aes(x = POS_N_S, y = LEVEL, label = file_hole)) +
       geom_point(aes(x = BLOCK_LOCATIONX, y = LEVEL))  +
-      geom_text(aes(x = BLOCK_LOCATIONX, y = LEVEL, label = COMP_AU),hjust = 0, vjust = 0,nudge_x = 0.5,nudge_y = 0.5) +
+      geom_text(aes(x = BLOCK_LOCATIONX, y = LEVEL, label = COMP_AU),nudge_y = 0.25) +
       scale_x_continuous(name="POSITION", breaks=seq(-100,120,5)) +
       scale_y_continuous(name="LEVEL", breaks=seq(380,1010,15))
     # geom_label(aes(label = HOLE_ID))
@@ -68,7 +67,7 @@ server <- function(input, output) {
   }
 
   output$BLOCKING_PLOT<- plotly::renderPlotly({p2()})
-  
+
 }
 
 shinyApp(ui, server)

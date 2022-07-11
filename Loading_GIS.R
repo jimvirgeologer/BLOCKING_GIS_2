@@ -49,8 +49,10 @@ face_map_gis<- function(i) {
     ROCKCODE = as.character(c8),
     SAMP_BY = as.character(c9),
     TENEMENT = as.character(c11),
-    file = i[1]) %>%
-    dplyr::filter(!is.na(HOLE_ID))
+    file = i[1],
+    file_hole = paste(HOLE_ID, file, sep = " ")) %>%
+    dplyr::filter(!is.na(HOLE_ID)) %>%
+    distinct()
   
   
 } 
@@ -144,10 +146,14 @@ face_map_gis_assay<- function(i) {
     ROCK_TYPE = as.character(c13),
     MV_WIDTH = as.numeric(c14),
     BATCH_NO = as.character(c17),
-    file = i[1]) %>%
-    dplyr::filter(!is.na(HOLE_ID))
+    file = i[1],
+    duplicate = paste(HOLE_ID,AU_GPT,AG_GPT,CU_PPM,PB_PPM,ZN_PPM,file)) %>%
+    dplyr::filter(!is.na(HOLE_ID)) %>%
+    distinct()
   
 } 
+
+
 
 
 ############# Applying Function to the file list gis ###############
@@ -155,7 +161,7 @@ df_gis_assay_raw <- lapply(file.list_gis, face_map_gis_assay) %>%
   bind_rows %>%
   as.data.frame() %>%
   distinct(.keep_all = TRUE)
-
+df_gis_assay_filter <- df_gis_assay_raw %>% filter(file == "./FACE_MAPPING_GIS/OLD/UGFS_2020.xlsx")
 
 ##########################
 
@@ -183,7 +189,8 @@ df_gis_assay <- df_gis_assay %>% mutate(LENGTH = ifelse(ROCK_TYPE != "MV", (3 - 
                                         LEN_AU = LENGTH * AU)
 
 
-df_gis_assay_block <- df_gis_assay %>% group_by(HOLE_ID) %>% 
+df_gis_assay_block <- df_gis_assay %>% filter (!is.na(AU)) %>%
+  group_by(HOLE_ID) %>% 
   summarize(COMP_AU = sum(LEN_AU)/sum(LENGTH))
 
 
@@ -278,7 +285,14 @@ plot(POS_LINES_E_W)
 
 ############# Intersection of the position lines and the face mapping plots #############
 POS_FACE_MAP <- st_intersection(POS_LINES_N_S,df_points)
-POS_FACE_MAP <- POS_FACE_MAP %>% mutate(BLOCK_LOCATIONX =  (LOCATIONX-((LOCATIONY - 815635.8096)/(tan(40*pi/180)))-614923.6274)/155.5724*10)
+
+#### Remove duplicates #####
+POS_FACE_MAP_2 <- POS_FACE_MAP %>% 
+  dplyr::distinct(HOLE_ID,COMP_AU,LEVEL,.keep_all = TRUE)
+
+###### For positioning along N-S position #######
+POS_FACE_MAP <- POS_FACE_MAP_2 %>% 
+  mutate(BLOCK_LOCATIONX =  (LOCATIONX-((LOCATIONY - 815635.8096)/(tan(40*pi/180)))-614923.6274)/155.5724*10)
 
 
 ############## Compositing per block ##############
