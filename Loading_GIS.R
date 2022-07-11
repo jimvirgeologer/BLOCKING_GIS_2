@@ -9,12 +9,10 @@ library(RColorBrewer)
 library(visdat)
 
 
-<<<<<<< HEAD
 
-setwd("~/Current Work/R_projects/BLOCKING_GIS_2")
-=======
+
 setwd("~/Current Work/R_Projects/BLOCKING_GIS_2")
->>>>>>> bf0a71558cf96c12afd0396e826b98b667b1e973
+
 toMatch <- c("~")
 file.list_gis <- list.files(path = './FACE_MAPPING_GIS', pattern = '.xlsx', recursive = TRUE, full.names = TRUE)
 file.list_gis <- file.list_gis[!grepl(paste(toMatch,collapse="|"), file.list_gis)]
@@ -57,7 +55,7 @@ face_map_gis<- function(i) {
     file = i[1],
     file_hole = paste(HOLE_ID, file, sep = " ")) %>%
     dplyr::filter(!is.na(HOLE_ID)) %>%
-    distinct()
+    filter(!is.na(LOCATIONX))
   
   
 } 
@@ -165,12 +163,14 @@ face_map_gis_assay<- function(i) {
 df_gis_assay_raw <- lapply(file.list_gis, face_map_gis_assay) %>%
   bind_rows %>%
   as.data.frame() %>%
-  distinct(.keep_all = TRUE)
+  distinct(duplicate,.keep_all = TRUE)
 df_gis_assay_filter <- df_gis_assay_raw %>% filter(file == "./FACE_MAPPING_GIS/OLD/UGFS_2020.xlsx")
 
 ##########################
 
-df_gis_assay <- df_gis_assay_raw %>% group_by(HOLE_ID,ROCK_TYPE) %>%
+df_gis_assay <- df_gis_assay_raw %>% 
+  filter  (!is.na(ROCK_TYPE)) %>%
+  group_by(HOLE_ID,ROCK_TYPE) %>%
   summarize(LENGTH = sum(LENGTH),
             AU = sum(LEN_AU)/ sum(LENGTH),
             AU = ifelse(AU >=25 ,25,AU),
@@ -250,11 +250,8 @@ col <- colorRamp(c("gray","blue","green","yellow","red","purple"))
 
 ############ INPUT SHAPEFILE POSITION LINES - N_S_ ###############  
 
-<<<<<<< HEAD
-setwd("~/Current Work/R_projects/BLOCKING_GIS_2/Shapefiles")
-=======
 setwd("~/Current Work/R_Projects/BLOCKING_GIS_2/Shapefiles")
->>>>>>> bf0a71558cf96c12afd0396e826b98b667b1e973
+
 
 
 POS_LINES_N_S <- st_read(
