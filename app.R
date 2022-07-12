@@ -62,10 +62,7 @@ server <- function(input, output) {
       geom_text(aes(x = BLOCK_LOCATIONX, y = LEVEL, label = COMP_AU),nudge_y = 0.25) +
       scale_x_continuous(name="POSITION", breaks=seq(-100,120,2)) +
       scale_y_continuous(name="LEVEL", breaks=seq(380,1010,15))
-    # geom_label(aes(label = HOLE_ID))
-    # geom_text(aes(label = paste(HOLE_ID,COMP_AU, sep = " ")), parse = TRUE)
-    # geom_text(hjust = 0, vjust = 0, aes(colour = factor(AVE)))+
-    # scale_colour_brewer(palette = "BuGnRd")
+   
 
   }
 

@@ -4,11 +4,10 @@ username:
 account: mcmadarang
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 6546549
-bundleId: 6076640
-url: https://mcmadarang.shinyapps.io/Blocking_GIS_2/
-when: 1657153598.79771
-lastSyncTime: 1657153598.79771
+appId: 6627972
+bundleId: 6089937
+url: https://mcmadarang.shinyapps.io/BLOCKING_GIS_2/
+when: 1657595672.22974
+lastSyncTime: 1657595672.22974
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: Changes.txt
