@@ -78,9 +78,10 @@ proj4string(POS_FACE_MAP_SP) <- proj4string(POS_FACE_MAP_SP) # Temp fix until ne
 proj4string(grd) <- proj4string(POS_FACE_MAP_SP)
 
 # Interpolate the grid cells using a power value of 2 (idp=2.0)
-P.idw <- gstat::idw(COMP_AU ~ 1, POS_FACE_MAP_SP , newdata=grd, idp=2.0)
+P.idw <- gstat::idw(COMP_AU ~ 1, POS_FACE_MAP_SP , newdata=grd, idp=1.0)
 
-# Convert to raster object then clip to Texas
+tm_shape(P.idw) + tm_raster(n = 10,)
+
 r       <- raster(P.idw)
 
 
@@ -88,18 +89,30 @@ r       <- raster(P.idw)
 W <- POS_FACE_MAP_SP@bbox
 r.m     <- mask(r, W)
 
-# Plot
-tm_shape(r) + 
-  tm_raster(n=10,palette = "RdBu", auto.palette.mapping = FALSE,
-            title="Predicted precipitation \n(in inches)") + 
+
+##### Palette######
+pal20 <- c("#003200", "#3C9600", "#006E00", "#556E19", "#00C800", "#8CBE8C",
+           "#467864", "#B4E664", "#9BC832", "#EBFF64", "#F06432", "#9132E6",
+           "#E664E6", "#9B82E6", "#B4FEF0", "#646464", "#C8C8C8", "#FF0000",
+           "#FFFFFF", "#5ADCDC")
+
+
+tm_shape(r) +
+  tm_raster(n=5,palette = pal20, auto.palette.mapping = FALSE,
+            title="Gold Grades g/T Au") +
   tm_shape(P) + tm_dots(size=0.2) +
   tm_legend(legend.outside=TRUE)
 
-# Finally, we'll clip the tessellated  surface to the Texas boundaries
-th.clp   <- raster::intersect(W,th.spdf)
 
-# Map the data
-tm_shape(th.clp) + 
-  tm_polygons(col="Precip_in", palette="RdBu", auto.palette.mapping=FALSE,
-              title="Predicted precipitation \n(in inches)") +
-  tm_legend(legend.outside=TRUE)
+
+
+
+# 
+# # Finally, we'll clip the tessellated  surface to the Texas boundaries
+# th.clp   <- raster::intersect(W,th.spdf)
+# 
+# # Map the data
+# tm_shape(th.clp) +
+#   tm_polygons(col="Precip_in", palette="RdBu", auto.palette.mapping=FALSE,
+#               title="Predicted precipitation \n(in inches)") +
+#   tm_legend(legend.outside=TRUE)
